@@ -1,21 +1,13 @@
-#ifndef RESERVATIONSATAION
-#define RESERVATIONSATAION
+#ifndef RESERVATIONSATAION_H
+#define RESERVATIONSATAION_H
 
 #include "Instruction.h"
 #include "Register.h"
 #include <vector>
 #include <map>
 extern Register* registers[6];
+extern map <string, int> needCycle;
 using namespace std;
-
-int getIndex(Register* r)
-{
-	for (int i = 0; i < 6; i++)
-	{
-		if (registers[i] == r)
-			return i;
-	}
-}
 
 class ReservationStation
 {
@@ -26,11 +18,10 @@ public:
 		buffer = nullptr;
 	}
 
-	void set(int num,int c)
+	void set(int num)
 	{
 		numRS = num;
 		myRS.resize(num);
-		requiredCycle = c;
 	}
 
 	bool full()
@@ -55,11 +46,10 @@ public:
 				string name = getRSName(inst, i);
 				Register* temp = new Register;
 				temp->setName(name);
-				temp->setValue(myRS[i].getOutputRegister()->getValue());
-				int j = getIndex(myRS[i].getOutputRegister());
+				*temp = myRS[i].getOutputRegister()->getValue();
+				int j = myRS[i].getOutputRegisterIndex();
 				registers[j] = temp;
 				myRS[i].setOutputRegister(temp);
-				myRS[i].setOutputRenaming(name);
 				return true;
 			}					
 		}
@@ -77,7 +67,23 @@ public:
 		return name;
 	}
 
-	bool update(int cycle)
+	bool execute()
+	{
+		bool flag = false;
+		if (buffer!=nullptr)
+		{
+			count--;
+			if (count == 0)
+			{
+				buffer->exection();
+				buffer = nullptr;
+				flag = true;
+			}
+		}
+		return flag;
+	}
+
+	void update(int cycle)
 	{
 		if (buffer==nullptr)
 		{
@@ -90,23 +96,12 @@ public:
 					if (i == myRS[j].getCycle() && myRS[j].ready() && i!=cycle)
 					{
 						buffer = &myRS[j];
-						count = requiredCycle;
-						return false;
+						count = needCycle[myRS[j].getOperator()];
+						break;
 					}
 				}
 			}
 		}
-		else
-		{
-			count--;
-			if (count == 0)
-			{
-				buffer->exection();
-				buffer = nullptr;
-				return true;
-			}				
-		}
-		return false;
 	}
 
 	int getMinCycle()
@@ -154,7 +149,6 @@ public:
 
 private:
 	int numRS;
-	int requiredCycle;
 	int count = 0;
 	vector <Instruction> myRS;
 	Instruction* buffer;

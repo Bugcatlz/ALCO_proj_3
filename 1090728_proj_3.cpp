@@ -1,5 +1,5 @@
-//«e´£:fetch:1 cycle¡BExection:2¡B5 cycle ¡BWrite back: 1 cycle¡A¥B­n¦Aµ¥¤@­Ócycle¤~¥i¥H®³¨ìvalue
-//regªì©l¬°0 2 4 6 8 
+//å‰æ:fetch:1 cycleã€Exection:2ã€5 cycle ã€Write back: 1 cycleï¼Œä¸”è¦å†ç­‰ä¸€å€‹cycleæ‰å¯ä»¥æ‹¿åˆ°value
+//regåˆå§‹ç‚º0 2 4 6 8 
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -8,6 +8,7 @@
 #include "Register.h"
 #include "ReservationStation.h"
 #include <iomanip>
+#include <map>
 using namespace std;
 
 void readFile(vector <Instruction> &insts);
@@ -16,24 +17,22 @@ void output(ReservationStation RS[],int cycle);
 
 int numAddRS = 3;
 int numMulRS = 2;
-int addCycle = 5;
-int mulCycle = 19;
 Register* registers[6];
-
+map <string, int> needCycle;
 int main(void)
 {
+	needCycle = { {"ADD",2},{"ADDI",2},{"SUB",2},{"MUL",10},{"DIV",40} };
 	for (int i = 1; i <= 5; i++)
-	{
 		registers[i] = new Register((i - 1) * 2);
-	}
 	vector <Instruction> insts;
 	ReservationStation RS[2];
-	RS[0].set(numAddRS,addCycle);
-	RS[1].set(numMulRS,mulCycle);
-	readFile(insts);
+	RS[0].set(numAddRS);
+	RS[1].set(numMulRS);
 	int cycle = 1;
 	int index = 0;
 	int done = 0;
+	readFile(insts);
+	
 	while (done != insts.size())
 	{
 		if (index <insts.size())
@@ -51,10 +50,12 @@ int main(void)
 					index++;
 			}
 		}
-		if (RS[0].update(cycle))
+		if (RS[0].execute())
 			done++;
-		if (RS[1].update(cycle))
+		if (RS[1].execute())
 			done++;
+		RS[0].update(cycle);
+		RS[1].update(cycle);
 		output(RS, cycle);
 		cycle++;
 	}

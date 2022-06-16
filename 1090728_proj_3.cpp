@@ -1,4 +1,3 @@
-//前提:fetch:1 cycle、Exection:2、5 cycle 、Write back: 1 cycle，且要再等一個cycle才可以拿到value
 //reg初始為0 2 4 6 8 
 #include <iostream>
 #include <fstream>

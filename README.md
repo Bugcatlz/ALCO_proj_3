@@ -1,5 +1,7 @@
 # ALCO_proj_3
- 
+
+## vedio
+<https://youtu.be/U_cpSb4RdTA>
 ## 前提
 1. fetch 為一個cycle
 2. execute add為 5 cycle mul為 19 cycle

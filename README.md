@@ -1,6 +1,6 @@
 # ALCO_proj_3
 
-## vedio
+## Video
 <https://youtu.be/U_cpSb4RdTA>
 ## 前提
 1. fetch 為一個cycle

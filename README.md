@@ -85,7 +85,6 @@ int cycle = -1;
 ```
 用來記錄這個Instruction進入RS的cycle
 
-### 6. OuputRemaing
 ### Public
 ### 1. Constructor
 
@@ -446,7 +445,7 @@ Instruction* buffer
 ```
 為一個pointer指向Instruction用來儲存當前正在執行的Instruction
 
-### Private
+### Public
 ### 1. Construction
 ```c
 ReservationStation()

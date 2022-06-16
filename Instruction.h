@@ -7,6 +7,7 @@
 using namespace std;
 
 extern Register* registers[6];
+
 class Instruction
 {
 public:
@@ -77,11 +78,6 @@ public:
 			return "";
 	}
 
-	bool getExecuted()
-	{
-		return executed;
-	}
-
 	string getType()
 	{
 		if (myOperator == "MUL" || myOperator == "DIV")
@@ -94,7 +90,6 @@ public:
 	{
 		myOperator.clear();
 		myReg.clear();
-		executed = false;
 		myImmediate = 0;
 		cycle = -1;
 	}
@@ -124,25 +119,6 @@ public:
 		return cycle;
 	}
 
-	void reverseState()
-	{
-		executed = !executed;
-	}
-
-	bool operator==(Instruction i)
-	{
-		if (myOperator != i.myOperator)
-			return false;
-		if (myReg.size() != i.myReg.size())
-			return false;
-		for (int j = 0; j < myReg.size(); j++)
-			if (myReg[j] != i.myReg[j])
-				return false;
-		if (myImmediate != i.myImmediate)
-			return false;
-		return true;
-	}
-
 	Register* getOutputRegister()
 	{
 		return myReg[0];
@@ -153,14 +129,9 @@ public:
 		myReg[0] = r;
 	}
 
-	string getOutputRenaming()
+	int getOutputRegisterIndex()
 	{
-		return OuputRemaing;
-	}
-
-	void setOutputRenaming(string s)
-	{
-		OuputRemaing = s;
+		return myRegIndex[0];
 	}
 
 	string getReg(int n)
@@ -181,7 +152,6 @@ private:
 	vector <Register*>myReg;
 	string myOperator = "";
 	int myImmediate = 0;
-	bool executed = false;
 	int cycle = -1;
 	string OuputRemaing;
 };

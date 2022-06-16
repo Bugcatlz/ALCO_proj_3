@@ -62,16 +62,6 @@ public:
 		renaming = s;
 	}
 
-	bool getState()
-	{
-		return renaming.size()==0;
-	}
-
-	void setValue(int n)
-	{
-		myValue = n;
-	}
-
 	string& getName()
 	{
 		return renaming;
